@@ -1,0 +1,347 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados del Simulacro</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --unsa-red: #8b0000;
+            --dark-blue: #2c3e50;
+            --success-green: #27ae60;
+            --warning-red: #c0392b;
+            --gold: #f1c40f;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #eaeaeb 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 30px 15px;
+        }
+
+        .main-card {
+            background: white;
+            padding: 50px 40px;
+            max-width: 700px;
+            margin: 0 auto;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .trophy-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            color: var(--dark-blue);
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .score-container {
+            background: linear-gradient(135deg, #ecedf1 0%, #764ba2 100%);
+            padding: 40px;
+            border-radius: 15px;
+            margin: 30px 0;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .score-label {
+            color: white;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .score-value {
+            font-size: 4em;
+            color: white;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            margin: 0;
+        }
+
+        .info-box {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 4px solid var(--gold);
+        }
+
+        .info-box p {
+            margin: 8px 0;
+            color: #555;
+        }
+
+        .btn-action {
+            display: inline-block;
+            width: 100%;
+            color: white;
+            padding: 18px 30px;
+            font-weight: bold;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 18px;
+            transition: all 0.3s;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        .btn-action:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            color: white;
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, var(--success-green) 0%, #229954 100%);
+        }
+
+        .btn-unlock {
+            background: linear-gradient(135deg, var(--warning-red) 0%, #a93226 100%);
+        }
+
+        .status-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            font-size: 14px;
+            border: 1px solid #c3e6cb;
+        }
+
+        .recommendation-box {
+            background: linear-gradient(135deg, #e8f6f3 0%, #d5f4e6 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border: 2px solid #a9dfbf;
+        }
+
+        .recommendation-box.warning {
+            background: linear-gradient(135deg, #fadbd8 0%, #f5b7b1 100%);
+            border: 2px solid #f1948a;
+        }
+
+        .recommendation-box h4 {
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .recommendation-box p {
+            margin: 10px 0;
+            color: #2c3e50;
+        }
+
+        .whatsapp-section {
+            background: linear-gradient(135deg, #dcf8c6 0%, #b2f2bb 100%);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 25px 0;
+            text-align: center;
+            border: 2px solid #25d366;
+        }
+
+        .whatsapp-section h5 {
+            color: #128c7e;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .qr-container {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            display: inline-block;
+            margin: 15px 0;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .qr-image {
+            max-width: 200px;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .whatsapp-text {
+            color: #128c7e;
+            font-size: 14px;
+            margin-top: 15px;
+            font-weight: 500;
+        }
+
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 12px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 15px 10px;
+            font-weight: bold;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-whatsapp:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+            color: white;
+        }
+
+        .discount-badge {
+            background: #f39c12;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: bold;
+            font-size: 14px;
+            margin: 10px 0;
+            box-shadow: 0 3px 10px rgba(243, 156, 18, 0.3);
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 30px;
+            color: var(--dark-blue);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--unsa-red);
+        }
+
+        .payment-note {
+            color: #666;
+            font-size: 14px;
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .main-card {
+                padding: 30px 20px;
+            }
+
+            .score-value {
+                font-size: 3em;
+            }
+
+            .trophy-icon {
+                font-size: 50px;
+            }
+
+            .btn-whatsapp {
+                display: block;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-card">
+        <div class="header-section">
+            <div class="trophy-icon">🏆</div>
+            <h1>¡Examen Finalizado!</h1>
+            <p class="subtitle">Resultados según Matriz RCU N° 0220-2024</p>
+        </div>
+
+        <div class="score-container">
+            <div class="score-label">Tu Puntaje Obtenido</div>
+            <div class="score-value">{{ intento.puntaje_final|floatformat:4 }}</div>
+            <div class="score-label">Puntos</div>
+        </div>
+
+        <div class="info-box">
+            <p><strong>🔍 ¿Quieres saber en qué temas fallaste?</strong></p>
+            <p>Generamos un análisis detallado de tus errores por curso, con estadísticas y recomendaciones personalizadas.</p>
+        </div>
+
+        {% if intento.nivel_acceso > 0 or intento.pagado_reporte %}
+            <a href="{% url 'mis_examenes' %}" class="btn-action btn-download" style="background: linear-gradient(135deg, #27ae60 0%, #1e8449 100%);">
+                📊 Ver Mi Semáforo Académico y Descargar PDFs
+            </a>
+
+            <div class="status-message">
+                ✅ ¡Acceso Desbloqueado! Entra a tu Dashboard para ver tus respuestas y descargar tu material.
+            </div>
+        {% else %}
+            <a href="{% url 'mis_examenes' %}" class="btn-action btn-unlock" style="background: linear-gradient(135deg, #8b0000 0%, #b22222 100%);">
+                🔓 Desbloquear Mi Semáforo por Cursos y Solucionarios
+            </a>
+
+            <p class="payment-note">
+                💡 Podrás activar el Diagnóstico por S/ 10.00 o el Paquete VIP Solucionario por S/ 25.00 directamente en tu panel.
+            </p>
+        {% endif %}
+
+        <div class="recommendation-box {% if intento.puntaje_final < 10 %}warning{% endif %}">
+            {% if intento.puntaje_final < 10 %}
+                <h4 style="color: var(--warning-red);">⚠️ ¿Necesitas reforzar tus conocimientos?</h4>
+                <p>Tu puntaje indica que necesitas mejorar en <strong>Matemáticas y Letras</strong>.</p>
+                <p>Comunícate con nosotros en <strong>VillTEC</strong>. Te daremos descuentos especiales en la Academia Harper.</p>
+                <div class="discount-badge">🎁 DESCUENTO 20% EXCLUSIVO</div>
+            {% else %}
+                <h4 style="color: var(--success-green);">🎉 ¡Vas por buen camino!</h4>
+                <p>Estás muy cerca de asegurar tu vacante. No bajes la guardia.</p>
+                <p>Únete a nuestro <strong>Ciclo Repaso Intensivo</strong> y asegura tu ingreso a la UNSA.</p>
+            {% endif %}
+        </div>
+
+        <div class="whatsapp-section">
+            <h5>📱 Contáctanos por WhatsApp</h5>
+            <p style="color: #128c7e; margin-bottom: 20px;">
+                Escanea el código QR o haz clic en el botón
+            </p>
+
+            <div class="qr-container">
+                <img src="{% url 'generar_qr_resultado' intento.id %}" alt="WhatsApp QR" class="qr-image">
+            </div>
+
+            <p class="whatsapp-text">Escanea con tu cámara y envíanos un mensaje directo</p>
+
+            <div style="margin-top: 20px;">
+                {% if intento.puntaje_final < 10 %}
+                    <a href="https://wa.me/{{ WHATSAPP_NUMERO }}?text=Hola,%20saqué%20{{ intento.puntaje_final|floatformat:4 }}%20en%20el%20simulacro%20y%20quiero%20informes%20sobre%20el%20descuento" class="btn-whatsapp">
+                        💬 Pedir Informes (Descuento 20%)
+                    </a>
+                {% else %}
+                    <a href="https://wa.me/{{ WHATSAPP_NUMERO }}?text=Hola,%20aprobé%20el%20simulacro%20con%20{{ intento.puntaje_final|floatformat:4 }}%20puntos%20y%20quiero%20información%20del%20Ciclo%20Repaso" class="btn-whatsapp">
+                        💬 Consultar Ciclo Repaso
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+
+        <a href="{% url 'inicio' %}" class="back-link">← Volver al Inicio</a>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

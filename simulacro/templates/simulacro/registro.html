@@ -1,0 +1,199 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro VILLTECC - Simulacros UNSA</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --unsa-red: #8b0000;
+            --unsa-red-light: #b22222;
+            --bg-body: #f4f6f9;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .card-registro {
+            border: none;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* PANEL IZQUIERDO (Información) */
+        .panel-info {
+            background: linear-gradient(135deg, var(--unsa-red) 0%, var(--unsa-red-light) 100%);
+            color: white;
+            padding: 3.5rem 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .info-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #ffd700;
+        }
+
+        /* PANEL DERECHO (Formulario) */
+        .panel-form {
+            padding: 3.5rem;
+            background-color: #ffffff;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 0.4rem;
+            font-size: 0.9rem;
+        }
+
+        /* Estilos generales para los inputs y selects renderizados por Django */
+        .panel-form input, .panel-form select {
+            width: 100%;
+            border-radius: 10px;
+            padding: 0.7rem 1rem;
+            border: 1px solid #dee2e6;
+            background-color: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+
+        .panel-form input:focus, .panel-form select:focus {
+            border-color: var(--unsa-red);
+            background-color: #fff;
+            box-shadow: 0 0 0 0.2rem rgba(139, 0, 0, 0.1);
+            outline: none;
+        }
+
+        .btn-registro {
+            background: linear-gradient(135deg, var(--unsa-red) 0%, var(--unsa-red-light) 100%);
+            color: white;
+            font-weight: bold;
+            border-radius: 12px;
+            padding: 0.9rem;
+            border: none;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+        }
+
+        .btn-registro:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(139, 0, 0, 0.3);
+            color: white;
+        }
+
+        .link-login {
+            color: var(--unsa-red);
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .link-login:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 991px) {
+            .panel-form { padding: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-xl-11">
+            <div class="card card-registro">
+                <div class="row g-0">
+                    
+                    <div class="col-lg-5 panel-info">
+                        <div class="text-center mb-4">
+                            <img src="{% static 'img/Logo.png' %}" alt="VILLTECC" height="90" class="rounded-3 shadow-sm bg-white p-2">
+                        </div>
+                        <h2 class="fw-bold mb-4">¡Prepárate para el Éxito!</h2>
+                        
+                        <div class="info-item">
+                            <h6 class="fw-bold text-warning mb-1"><i class="bi bi-shield-lock-fill me-2"></i>Seguridad con tu DNI</h6>
+                            <p class="small mb-0">Tu DNI será tu usuario único. Esto evita cuentas duplicadas y asegura que tus resultados sean privados.</p>
+                        </div>
+
+                        <div class="info-item">
+                            <h6 class="fw-bold text-warning mb-1"><i class="bi bi-graph-up-arrow me-2"></i>Reporte Diagnóstico</h6>
+                            <p class="small mb-0">Usamos tus datos para generar reportes en PDF y medir tus fortalezas por cada curso.</p>
+                        </div>
+
+                        <div class="info-item">
+                            <h6 class="fw-bold text-warning mb-1"><i class="bi bi-mortarboard-fill me-2"></i>Ranking por Carrera</h6>
+                            <p class="small mb-0">Al elegir tu carrera correctamente, te comparamos solo con tus competidores reales en la UNSA.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-7 panel-form">
+                        <h3 class="fw-bold mb-1">Crea tu cuenta VILLTECC</h3>
+                        <p class="text-muted mb-4">Ingresa tus datos oficiales para el sistema.</p>
+
+                        <form method="post">
+                            {% csrf_token %}
+
+                            <div class="row g-3">
+                                {% for field in form %}
+                                    <div class="{% if field.name == 'username' or field.name == 'telefono' %}col-md-6{% else %}col-12{% endif %}">
+                                        <label class="form-label">
+                                            {{ field.label }}
+                                        </label>
+                                        
+                                        {{ field }}
+
+                                        {% if field.help_text %}
+                                            <div class="form-text small">{{ field.help_text }}</div>
+                                        {% endif %}
+
+                                        {% for error in field.errors %}
+                                            <div class="text-danger small fw-bold mt-1">
+                                                <i class="bi bi-exclamation-circle-fill me-1"></i>{{ error }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            <button type="submit" class="btn btn-registro w-100 mt-4">
+                                <i class="bi bi-person-plus-fill me-2"></i> Registrarme e Iniciar Preparación
+                            </button>
+                        </form>
+
+                        <div class="text-center mt-4 border-top pt-3">
+                            <span class="text-muted">¿Ya tienes cuenta?</span> 
+                            <a href="{% url 'login' %}" class="link-login ms-1">Inicia sesión aquí</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

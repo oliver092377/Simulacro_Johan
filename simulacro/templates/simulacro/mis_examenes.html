@@ -1,0 +1,197 @@
+{% extends "simulacro/base.html" %}
+{% load static %}
+
+{% block title %}Mis Examenes{% endblock %}
+
+{% block extra_css %}
+<style>
+    :root {
+        --unsa-red: #8b0000;
+        --unsa-red-light: #b22222;
+        --unsa-dark: #2c3e50;
+    }
+
+    .card-intento {
+        background: white;
+        border-radius: 18px;
+        border: none;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+        margin-bottom: 30px;
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+    .card-intento:hover { transform: translateY(-4px); }
+
+    .header-intento {
+        background: linear-gradient(135deg, var(--unsa-dark), #34495e);
+        color: white;
+        padding: 18px 25px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .puntaje-box {
+        background: rgba(255,255,255,0.15);
+        padding: 8px 18px;
+        border-radius: 12px;
+        font-size: 1.25rem;
+        font-weight: 800;
+        color: #ffd700;
+    }
+
+    .locked-box {
+        background: #fff8f8;
+        border: 2px dashed #ffb3b3;
+        border-radius: 15px;
+        padding: 30px;
+        text-align: center;
+    }
+
+    .btn-vip-upgrade {
+        background: linear-gradient(135deg, #d4af37, #aa7c11);
+        color: white;
+        font-weight: bold;
+        border: none;
+        box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
+    }
+    .btn-vip-upgrade:hover {
+        background: linear-gradient(135deg, #aa7c11, #855f08);
+        color: white;
+    }
+
+    .badge-curso {
+        font-size: 0.9rem;
+        padding: 8px 14px;
+        border-radius: 10px;
+        margin: 4px;
+        display: inline-block;
+        font-weight: 600;
+    }
+    .bg-verde { background-color: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; }
+    .bg-amarillo { background-color: #fff3cd; color: #664d03; border: 1px solid #ffecb5; }
+    .bg-rojo { background-color: #f8d7da; color: #842029; border: 1px solid #f5c2c7; font-weight: bold; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="text-center mb-5">
+        <h1 class="fw-bold text-dark"><i class="bi bi-person-lines-fill text-danger me-2"></i>Historial de Examenes</h1>
+        <p class="text-muted">Analiza tus resultados, identifica tus puntos debiles y descarga tus reportes.</p>
+    </div>
+
+    {% for item in historial %}
+        <div class="card card-intento">
+            <div class="header-intento">
+                <div>
+                    <span class="badge bg-danger mb-1">{{ item.intento.area.get_nombre_display }}</span>
+                    <h4 class="mb-0 fw-bold">Simulacro UNSA</h4>
+                    <small class="opacity-75"><i class="bi bi-calendar3 me-1"></i> Rendido el: {{ item.intento.fecha_inicio|date:"d/m/Y - h:i A" }}</small>
+                </div>
+                <div class="puntaje-box">
+                    {{ item.intento.puntaje_final|floatformat:4 }} <span class="fs-6 fw-normal text-white">pts</span>
+                </div>
+            </div>
+
+            <div class="card-body p-4">
+                {% if item.intento.nivel_acceso == 0 and not item.intento.pagado_reporte %}
+                    <div class="locked-box">
+                        <i class="bi bi-lock-fill fs-1 text-danger mb-2"></i>
+                        <h4 class="fw-bold text-dark">Analisis Detallado Bloqueado</h4>
+                        <p class="text-muted small">
+                            Identifica tus cursos debiles antes del examen oficial y descarga las soluciones paso a paso.
+                        </p>
+                        <div class="row justify-content-center mt-4 g-3">
+                            <div class="col-md-5">
+                                <div class="p-3 bg-white rounded-3 shadow-sm border h-100 d-flex flex-column justify-content-between">
+                                    <div>
+                                        <h6 class="fw-bold text-dark">Paquete Diagnostico</h6>
+                                        <p class="small text-muted mb-2">Semaforo de colores por curso + Reporte PDF.</p>
+                                    </div>
+                                    <a href="https://wa.me/{{ WHATSAPP_NUMERO }}?text=Hola,%20quiero%20desbloquear%20el%20Diagnostico%20de%20S/10%20para%20mi%20DNI:%20{{ user.username }}" target="_blank" class="btn btn-outline-danger w-100 fw-bold mt-2">
+                                        Desbloquear por S/ 10.00
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="p-3 bg-white rounded-3 shadow-sm border border-warning h-100 d-flex flex-column justify-content-between">
+                                    <div>
+                                        <span class="badge bg-warning text-dark float-end">RECOMENDADO</span>
+                                        <h6 class="fw-bold text-dark">Paquete VIP Completo</h6>
+                                        <p class="small text-muted mb-2">Todo lo de S/10 + <strong>Solucionario Explicado</strong>.</p>
+                                    </div>
+                                    <a href="https://wa.me/{{ WHATSAPP_NUMERO }}?text=Hola,%20quiero%20el%20Paquete%20VIP%20de%20S/25%20para%20mi%20DNI:%20{{ user.username }}" target="_blank" class="btn btn-vip-upgrade w-100 mt-2">
+                                        Desbloquear VIP S/ 25.00
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <h6 class="fw-bold text-dark mb-3"><i class="bi bi-traffic-light me-2"></i>Tu Semaforo de Rendimiento por Curso:</h6>
+                    <div class="mb-4">
+                        {% if item.semaforo.rojos %}
+                            <div class="mb-2">
+                                <span class="small fw-bold text-danger d-block mb-1"><i class="bi bi-exclamation-triangle-fill me-1"></i>Cursos en Peligro:</span>
+                                {% for curso in item.semaforo.rojos %}
+                                    <span class="badge-curso bg-rojo">{{ curso.nombre }}: {{ curso.porcentaje }}%</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        {% if item.semaforo.amarillos %}
+                            <div class="mb-2">
+                                <span class="small fw-bold text-warning d-block mb-1"><i class="bi bi-exclamation-circle-fill me-1"></i>Nivel Intermedio:</span>
+                                {% for curso in item.semaforo.amarillos %}
+                                    <span class="badge-curso bg-amarillo">{{ curso.nombre }}: {{ curso.porcentaje }}%</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        {% if item.semaforo.verdes %}
+                            <div class="mb-2">
+                                <span class="small fw-bold text-success d-block mb-1"><i class="bi bi-check-circle-fill me-1"></i>Cursos Dominados:</span>
+                                {% for curso in item.semaforo.verdes %}
+                                    <span class="badge-curso bg-verde">{{ curso.nombre }}: {{ curso.porcentaje }}%</span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <hr class="text-muted opacity-25">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-3">
+                        <div>
+                            <a href="{% url 'descargar_pdf' item.intento.id %}" target="_blank" class="btn btn-danger fw-bold" style="background-color: var(--unsa-red);">
+                                <i class="bi bi-file-earmark-pdf-fill me-1"></i> Descargar Reporte PDF
+                            </a>
+                        </div>
+                        {% if item.intento.nivel_acceso == 1 %}
+                            <div>
+                                <a href="https://wa.me/{{ WHATSAPP_NUMERO }}?text=Hola,%20quiero%20subir%20a%20VIP%20para%20ver%20el%20Solucionario%20del%20DNI:%20{{ user.username }}" target="_blank" class="btn btn-outline-dark fw-bold btn-sm">
+                                    Desbloquear Solucionario (+S/ 15)
+                                </a>
+                            </div>
+                        {% elif item.intento.nivel_acceso == 2 %}
+                            <div>
+                                <a href="{% url 'descargar_solucionario_pdf' item.intento.id %}" class="btn btn-vip-upgrade">
+                                    <i class="bi bi-star-fill me-1"></i> Descargar Solucionario PDF
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% empty %}
+        <div class="text-center p-5 bg-white rounded-4 shadow-sm">
+            <i class="bi bi-journal-x fs-1 text-muted d-block mb-3"></i>
+            <h4 class="fw-bold text-dark">Aun no has rendido ningun simulacro</h4>
+            <p class="text-muted mb-4">Selecciona tu area y empieza tu preparacion.</p>
+            <a href="{% url 'inicio' %}" class="btn btn-danger fw-bold px-4 py-2" style="background-color: var(--unsa-red);">
+                Ir a Dar un Simulacro <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

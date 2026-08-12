@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Realizar Pago</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 30px; background-color: #f4f4f4; }
+        .card { background: white; padding: 40px; max-width: 500px; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; margin-bottom: 10px; }
+        .instrucciones { text-align: left; background: #eef; padding: 20px; border-radius: 5px; margin: 20px 0; }
+       /* .qr-placeholder {
+            width: 250px; height: 250px; background-color: #ddd; margin: 0 auto;
+            display: flex; align-items: center; justify-content: center; color: #666;
+            border: 2px dashed #999;
+        }*/
+        .btn-whatsapp {
+            display: inline-block; background-color: #25D366; color: white; padding: 15px 30px;
+            font-weight: bold; text-decoration: none; border-radius: 5px; margin-top: 20px; font-size: 18px;
+        }
+        .nota-admin { font-size: 0.9em; color: #777; margin-top: 30px; font-style: italic; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>¡Estás a un paso!</h1>
+        <p>Para desbloquear tu Reporte Detallado y Gráficos de Evolución, realiza el pago de <strong>S/ 10.00</strong>.</p>
+
+        <div style="margin: 70px 0;">
+            <div class="qr-placeholder">
+                <img src="{% static 'img/qr.png' %}" alt="QR Yape" style="width: 250px; border-radius: 10px;">
+            </div>
+            <br>
+            <h3>Yape : 916-948-025</h3>
+            <p>Titular:Johan Vilca Flores</p>
+        </div>
+
+        <div class="instrucciones">
+            <strong>Pasos para activar:</strong>
+            <ol>
+                <li>Escanea el QR o yapea al número indicado.</li>
+                <li>Toma una captura de pantalla del pago.</li>
+                <li>Envíala a nuestro WhatsApp indicando tu usuario: <strong>{{ user.username }}</strong>.</li>
+            </ol>
+        </div>
+
+        <a href="https://wa.me/{{ WHATSAPP_NUMERO }}?text=Hola,%20ya%20pagué%20por%20mi%20reporte.%20Mi%20usuario%20es%20{{ user.username }}" class="btn-whatsapp" target="_blank">
+            Enviar Comprobante al WhatsApp
+        </a>
+
+        <div class="nota-admin">
+            Una vez verificado, actualiza esta página para ver tu botón de descarga.
+        </div>
+
+        <br>
+        <a href="{% url 'ver_resultado' intento.id %}">Volver al Resultado</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,404 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VILLTECC | Simulador Oficial UNSA</title>
+    <link rel="shortcut icon" type="image/png" href="{% static 'img/Logo.png' %}"/>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --unsa-red: #8b0000;
+            --unsa-red-light: #a51313;
+            --unsa-dark: #1e293b;
+            --bg-light: #f8fafc;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-light);
+            min-height: 100vh;
+            color: #334155;
+        }
+
+        /* --- NAVBAR Y MENÚ VENTANILLA DE USUARIO --- */
+        .navbar-villtecc {
+            background: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .user-pill {
+            background: #f1f5f9;
+            border: 1px solid #e2e8f0;
+            padding: 6px 16px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: var(--unsa-dark);
+        }
+
+        .user-pill:hover {
+            background: #e2e8f0;
+        }
+
+        .user-avatar {
+            background: var(--unsa-red);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-menu-custom {
+            border: none;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            border-radius: 16px;
+            padding: 15px;
+            min-width: 250px;
+        }
+
+        /* --- HERO PRINCIPAL VILLTECC --- */
+        .hero-banner {
+            background: linear-gradient(135deg, var(--unsa-dark) 0%, #0f172a 100%);
+            color: white;
+            border-radius: 24px;
+            padding: 50px 30px;
+            margin: 30px 0 40px 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(15, 23, 42, 0.2);
+        }
+
+        .hero-banner::after {
+            content: "";
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(139,0,0,0.4) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+        }
+
+        .hero-logo {
+            width: 90px;
+            height: 90px;
+            border-radius: 20px;
+            object-fit: cover;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            border: 3px solid rgba(255,255,255,0.1);
+        }
+
+        /* --- BOTONES DE ÁREA GIGANTES --- */
+        .area-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 20px;
+            padding: 28px 25px;
+            text-decoration: none;
+            color: var(--unsa-dark);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .area-card::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 8px;
+            height: 100%;
+            background: var(--unsa-red);
+            transition: width 0.3s ease;
+        }
+
+        .area-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(139, 0, 0, 0.12);
+            border-color: var(--unsa-red);
+        }
+
+        .area-card:hover::before {
+            width: 14px;
+        }
+
+        .area-icon {
+            font-size: 2.2rem;
+            color: var(--unsa-red);
+            background: #fff1f2;
+            width: 65px;
+            height: 65px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        /* --- SECCIÓN INFORMATIVA INFERIOR --- */
+        .info-section {
+            margin-top: 60px;
+            padding-top: 50px;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .feature-box {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            height: 100%;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            transition: transform 0.2s;
+        }
+
+        .feature-box:hover {
+            transform: translateY(-3px);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            color: var(--unsa-red);
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR CON CABECERA AMPLIADA Y MENÚ DESPLEGABLE EN ESQUINA -->
+    <nav class="navbar-villtecc py-3">
+        <div class="container d-flex justify-content-between align-items-center">
+            
+            <!-- MARCA LOGO IZQUIERDA (MÁS GRANDE Y NOTORIA) -->
+            <a href="{% url 'inicio' %}" class="text-decoration-none d-flex align-items-center gap-3">
+                <img src="{% static 'img/Logo.png' %}" alt="Logo VILLTECC" style="height: 55px; width: 55px; object-fit: cover;" class="rounded-3 shadow">
+                <div>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="fw-bolder text-dark tracking-wide" style="font-size: 1.6rem; letter-spacing: -0.5px;">VILLTECC</span>
+                        <span class="badge bg-danger px-2 py-1" style="font-size: 0.8rem;">UNSA</span>
+                    </div>
+                    <span class="d-block text-muted fw-semibold" style="font-size: 0.8rem; margin-top: -4px;">Simulador Oficial de Admisión</span>
+                </div>
+            </a>
+
+            <!-- VENTANILLA DE USUARIO DERECHA (MÁS GRANDE) -->
+            <div>
+                {% if user.is_authenticated %}
+                    <div class="dropdown">
+                        <div class="user-pill dropdown-toggle py-2 px-3 shadow-sm" data-bs-toggle="dropdown" aria-expanded="false" style="border-width: 2px;">
+                            <div class="user-avatar" style="width: 38px; height: 38px; font-size: 1.1rem;">
+                                {{ user.username|make_list|first|upper }}
+                            </div>
+                            <div class="d-none d-md-block text-start ms-1" style="line-height: 1.2;">
+                                <span class="d-block fw-bold text-dark" style="font-size: 1rem;">{{ user.first_name|default:user.username }}</span>
+                                <span class="text-muted fw-semibold" style="font-size: 0.8rem;">Postulante <i class="bi bi-chevron-down ms-1"></i></span>
+                            </div>
+                        </div>
+
+                        <!-- LA VENTANITA DESPLEGABLE -->
+                        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom mt-2">
+                            <li class="px-3 py-2 border-bottom mb-2">
+                                <small class="text-muted d-block">Postulante logueado:</small>
+                                <strong class="text-dark d-block fs-6">{{ user.first_name }} {{ user.last_name }}</strong>
+                                <span class="badge bg-secondary mt-1">DNI: {{ user.username }}</span>
+                                {% if user.perfil.carrera %}
+                                    <div class="small text-danger mt-1 fw-semibold"><i class="bi bi-mortarboard-fill me-1"></i> {{ user.perfil.carrera }}</div>
+                                {% endif %}
+                            </li>
+                            <li>
+                                <a class="dropdown-item py-2 fw-bold text-dark rounded-2" href="{% url 'mis_examenes' %}">
+                                    <i class="bi bi-bar-chart-fill text-danger me-2"></i> Mis Notas y Semáforo
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form action="{% url 'logout' %}" method="post" class="m-0">
+                                    {% csrf_token %}
+                                    <button type="submit" class="dropdown-item py-2 fw-bold text-danger rounded-2">
+                                        <i class="bi bi-box-arrow-right me-2"></i> Cerrar Sesión
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                {% else %}
+                    <div class="d-flex gap-2">
+                        <a href="{% url 'login' %}" class="btn btn-outline-dark fw-bold px-4 py-2 rounded-pill">Ingresar</a>
+                        <a href="{% url 'registro' %}" class="btn btn-danger fw-bold px-4 py-2 rounded-pill shadow-sm" style="background-color: var(--unsa-red);">Registrarse</a>
+                    </div>
+                {% endif %}
+            </div>
+
+        </div>
+    </nav>
+
+    <!-- CONTENEDOR CENTRAL -->
+    <div class="container max-w-lg" style="max-width: 960px;">
+        
+        <!-- HERO BANNER DE VILLTECC -->
+        <div class="hero-banner">
+            <div class="row align-items-center">
+                <div class="col-md-8 text-center text-md-start mb-4 mb-md-0">
+                    <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold mb-3">
+                        <i class="bi bi-cpu-fill me-1"></i> Tecnología de Evaluación Inteligente
+                    </span>
+                    <h1 class="fw-bold mb-3 display-6">Simulador de Admisión <span class="text-warning">VILLTECC</span></h1>
+                    <p class="text-white-50 fs-6 mb-0 pe-md-4">
+                        Entrena con preguntas reales calibradas bajo la norma oficial <strong>RCU N° 0220-2024</strong>. Medición de puntaje de alta precisión con 7 decimales y diagnóstico de debilidades por curso.
+                    </p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <img src="{% static 'img/Logo.png' %}" alt="VILLTECC" class="hero-logo">
+                    <div class="mt-2 text-white-50 small fw-bold">100% Exclusivo VILLTECC</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECCIÓN DE SELECCIÓN DE ÁREA -->
+        <div class="text-center mb-4">
+            <h2 class="fw-bold text-dark">Selecciona tu Área de Postulación</h2>
+            <p class="text-muted">Elige el canal al que postulas para iniciar un simulacro con el tiempo y pesos exactos</p>
+        </div>
+
+        {% if user.is_authenticated and mensaje_error %}
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-8 text-center p-5 bg-white rounded-4 shadow border border-2 border-danger">
+                <div class="mb-3">
+                    <i class="bi bi-shield-lock-fill text-danger" style="font-size: 4rem;"></i>
+                </div>
+                <h3 class="fw-bold text-dark">Examen no habilitado</h3>
+                <p class="text-muted fs-5 mb-4">
+                    {{ mensaje_error }}
+                </p>
+                <p class="small text-muted mb-0">
+                    <i class="bi bi-hourglass-split me-1"></i>El administrador habilitará tu acceso en el momento adecuado.
+                </p>
+            </div>
+        </div>
+        {% elif user.is_authenticated and not examen_habilitado %}
+        <div class="row justify-content-center mb-5">
+            <div class="col-md-8 text-center p-5 bg-white rounded-4 shadow border border-2 border-warning">
+                <div class="mb-3">
+                    <i class="bi bi-hourglass-split text-warning" style="font-size: 4rem;"></i>
+                </div>
+                <h3 class="fw-bold text-dark">¡El examen aún no está disponible para ti!</h3>
+                <p class="text-muted fs-5 mb-4">
+                    Tu acceso al simulacro será habilitado por el administrador. Revisa tu DNI ({{ user.username }}) en el panel de administración.
+                </p>
+                <p class="small text-muted mb-0">
+                    <i class="bi bi-shield-lock-fill me-1"></i>Plataforma blindada por VILLTECC. Acceso personalizado por usuario.
+                </p>
+            </div>
+        </div>
+        {% else %}
+
+        <!-- ÁREAS DE EXAMEN -->
+        <div class="row g-4 mb-5">
+            {% for area in areas %}
+                <div class="col-md-6">
+                    <a href="{% url 'realizar_examen' area.id %}" class="area-card shadow-sm">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="area-icon">
+                                {% if area.nombre == 'ING' %} <i class="bi bi-gear-wide-connected"></i>
+                                {% elif area.nombre == 'BIO' %} <i class="bi bi-heart-pulse-fill"></i>
+                                {% elif area.nombre == 'SOC' %} <i class="bi bi-globe-americas"></i>
+                                {% else %} <i class="bi bi-journal-check"></i> {% endif %}
+                            </div>
+                            <div class="text-start">
+                                <h4 class="fw-bold mb-1">{{ area.get_nombre_display }}</h4>
+                                <span class="text-muted small d-block">Simulación oficial con temporizador</span>
+                            </div>
+                        </div>
+                        <div class="fs-3 text-danger"><i class="bi bi-arrow-right-circle-fill"></i></div>
+                    </a>
+                </div>
+            {% empty %}
+                <div class="col-12 text-center p-5 bg-white rounded-4 shadow-sm border">
+                    <i class="bi bi-exclamation-triangle-fill fs-1 text-warning d-block mb-3"></i>
+                    <h4 class="fw-bold">Aún no hay exámenes habilitados</h4>
+                    <p class="text-muted mb-0">El equipo técnico de VILLTECC está cargando el banco de preguntas. Regresa pronto.</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% endif %}
+
+        <!-- =========================================================
+             NUEVA SECCIÓN INFORMATIVA: ¿DE QUÉ SIRVE ENTRENAR AQUÍ?
+             ========================================================= -->
+        <div class="info-section">
+            <div class="text-center mb-5">
+                <span class="text-danger fw-bold text-uppercase small tracking-wider">Metodología VILLTECC</span>
+                <h3 class="fw-bold mt-1">¿Por qué nuestro simulador te asegura el ingreso?</h3>
+            </div>
+
+            <div class="row g-4 mb-5">
+                <!-- Beneficio 1 -->
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <i class="bi bi-calculator-fill feature-icon"></i>
+                        <h5 class="fw-bold">Precisión Algorítmica</h5>
+                        <p class="text-muted small mb-0">
+                            No usamos puntajes simples. Aplicamos la matriz exacta de 7 decimales de la UNSA (RCU N° 0220-2024), donde cada curso pesa diferente según tu área.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Beneficio 2 -->
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <i class="bi bi-traffic-light feature-icon"></i>
+                        <h5 class="fw-bold">Semáforo de Diagnóstico</h5>
+                        <p class="text-muted small mb-0">
+                            Al finalizar, el sistema clasifica tus cursos en Verde (Dominado), Amarillo (Repaso) y Rojo (Peligro) para que sepas exactamente en qué enfocarte.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Beneficio 3 -->
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <i class="bi bi-file-earmark-lock2-fill feature-icon"></i>
+                        <h5 class="fw-bold">Solucionarios Paso a Paso</h5>
+                        <p class="text-muted small mb-0">
+                            Descarga reportes PDF exclusivos y accede a la explicación completa de cada ejercicio para no volver a cometer el mismo error en el examen real.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer class="text-center py-4 mt-5 text-muted small border-top bg-white">
+        © 2026 <strong>VILLTECC</strong> - Dirección de Tecnología y Desarrollo de Software. Todos los derechos reservados.
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle con Popper (Esencial para que abra la ventanilla de usuario) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Solucionario Oficial VILLTECC - Simulacro UNSA</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    
+    <!-- 🚀 MOTOR MATHJAX: Transforma fórmulas LaTeX en matemáticas puras y legibles -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+          tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] }
+        };
+    </script>
+
+    <style>
+        body { 
+            background-color: #f8fafc; 
+            font-family: 'Helvetica Neue', Arial, sans-serif; 
+            color: #1e293b;
+        }
+
+        /* --- ESTILOS INSTITUCIONALES CALCADOS DE TU CAPTURA --- */
+        .header-title {
+            color: #8b0000;
+            font-weight: 800;
+            font-size: 1.6rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .licencia-box {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .linea-roja {
+            border-top: 2px solid #8b0000;
+            margin: 1.5rem 0;
+            opacity: 1;
+        }
+
+        .pregunta-enunciado {
+            font-size: 1.05rem;
+            color: #0f172a;
+            font-weight: 600;
+            font-style: italic;
+            line-height: 1.6;
+        }
+
+        .curso-tag {
+            font-weight: 800;
+        }
+
+        .caja-verde-menta {
+            background-color: #f0fdf4;
+            border: 1px solid #dcfce7;
+            padding: 1.25rem 1.5rem;
+            border-radius: 6px;
+            color: #166534;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            white-space: pre-line; /* Respeta los párrafos y enters de la BD */
+        }
+
+        .titulo-explicacion {
+            color: #15803d;
+            font-weight: 800;
+            font-size: 0.95rem;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        .pregunta-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        /* --- 🖨️ BLINDAJE DE IMPRESIÓN Y PDF (LO MÁS IMPORTANTE) --- */
+        @media print {
+               @page {
+        size: A4 vertical;
+        margin: 1.5cm 1.5cm 1.5cm 1.5cm; /* Márgenes simétricos elegantes */
+    }
+
+    /* 2. Oculta la fecha arriba y el enlace abajo que pone Chrome por defecto */
+    body { 
+        margin: 0 !important; 
+        padding: 0 !important; 
+        background-color: white !important; 
+    }
+            .no-print { display: none !important; }
+            body { background-color: white !important; margin: 0; padding: 0; }
+            .container { max-width: 100% !important; width: 100% !important; padding: 0 !important; }
+            .pregunta-card { 
+                box-shadow: none !important; 
+                padding: 1rem 0 !important;
+                margin-bottom: 1.5rem !important;
+                border-bottom: 1px solid #cbd5e1 !important;
+                border-radius: 0 !important;
+                /* Evita que una pregunta se corte a la mitad en el cambio de hoja */
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+            /* Obliga al navegador a imprimir el color verde menta y el rojo corporativo */
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .caja-verde-menta {
+                background-color: #f0fdf4 !important;
+                border: 1px solid #bbf7d0 !important;
+            }
+        }
+    </style>
+</head>
+<body class="py-4">
+
+<!-- BOTÓN FLOTANTE PARA DESCARGAR EN PDF (Se oculta al imprimir) -->
+<div class="no-print text-center mb-4">
+    <button onclick="window.print()" class="btn btn-danger btn-lg px-5 shadow-sm fw-bold">
+        <i class="bi bi-file-earmark-pdf-fill me-2"></i>Descargar Solucionario en PDF
+    </button>
+</div>
+
+<div class="container" style="max-width: 850px;">
+
+    <!-- ENCABEZADO OFICIAL VILLTECC -->
+    <div class="text-center mb-4">
+        <h1 class="header-title mb-1">■ SOLUCIONARIO OFICIAL VILLTECC - SIMULACRO UNSA</h1>
+        <div class="licencia-box">
+            DOCUMENTO LICENCIADO EXCLUSIVAMENTE PARA: <strong>(DNI: {{ request.user.username }})</strong><br>
+            <em>Queda estrictamente prohibida su difusión en grupos de WhatsApp o redes sociales. El sistema rastrea descargas ilegales.</em>
+        </div>
+        <hr class="linea-roja">
+    </div>
+
+    <!-- BUCLE DE PREGUNTAS DEL EXAMEN -->
+    {% for resp in respuestas %}
+    <div class="pregunta-card">
+        
+        <!-- ENUNCIADO DE LA PREGUNTA -->
+        <div class="pregunta-enunciado mb-3">
+            <span class="curso-tag">Pregunta {{ forloop.counter }} [{{ resp.pregunta.asignatura.nombre }}]:</span> 
+            {{ resp.pregunta.texto_pregunta|safe }}
+        </div>
+
+        <!-- INDICADOR DE FALLO O ACIERTO -->
+        <div class="mb-3 fw-bold" style="font-size: 0.95rem;">
+            {% if resp.es_correcta %}
+                <span style="color: #16a34a;">■ ¡Respuesta Correcta!</span>
+            {% else %}
+                <span style="color: #dc2626;">■ Fallaste o no respondiste</span>
+            {% endif %}
+        </div>
+
+        <!-- CAJA VERDE MENTA DE EXPLICACIÓN PASO A PASO -->
+        {% if resp.pregunta.solucion_texto %}
+        <div class="caja-verde-menta">
+            <div class="titulo-explicacion">■ EXPLICACIÓN PASO A PASO:</div>
+            
+            <!-- Contenido de la resolución -->
+            <div class="contenido-resolucion">
+                {{ resp.pregunta.solucion_texto|safe }}
+            </div>
+
+           <!-- FOTO DE RESOLUCIÓN A MANO (Solo se muestra si realmente hay un archivo subido) -->
+{% if resp.pregunta.solucion_imagen and resp.pregunta.solucion_imagen.name %}
+    <div class="text-center mt-3 pt-3 border-top border-success-subtle">
+        <img src="{{ resp.pregunta.solucion_imagen.url }}" class="img-fluid rounded border" alt="Solución gráfica" style="max-height: 300px;">
+    </div>
+{% endif %}
+        </div>
+        {% endif %}
+
+    </div>
+    {% empty %}
+    <div class="text-center p-5 text-muted">
+        No se encontraron preguntas resueltas para este intento.
+    </div>
+    {% endfor %}
+
+</div>
+
+</body>
+</html>

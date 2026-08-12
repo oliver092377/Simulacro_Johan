@@ -1,0 +1,107 @@
+{% extends "simulacro/base.html" %}
+{% load static %}
+
+{% block title %}Examen - {{ area.get_nombre_display }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/examen.css' %}">
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['\\(', '\\)'], ['$', '$']],
+            displayMath: [['\\[', '\\]'], ['$$', '$$']]
+        }
+    };
+</script>
+{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block content %}
+<div id="cronometro" class="reloj-flotante">00:00:00</div>
+
+<div class="container">
+    <h2 style="color: #8b0000; border-bottom: 2px solid #8b0000; padding-bottom: 10px;">
+        Examen: {{ area.get_nombre_display }}
+    </h2>
+
+    <div class="progreso-info d-flex justify-content-between mb-2">
+        <span>Progreso: <strong id="cont-hechas">0</strong> de {{ preguntas|length }}</span>
+        <span id="label-pregunta-actual">Pregunta 1 de {{ preguntas|length }}</span>
+    </div>
+
+    <div class="mapa-preguntas">
+        {% for pregunta in preguntas %}
+            <div class="badge-n" id="badge-{{ forloop.counter }}" onclick="jumpToStep({{ forloop.counter }})">
+                {{ forloop.counter }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <form id="formulario-examen" method="POST" action="">
+        {% csrf_token %}
+
+        {% for pregunta in preguntas %}
+            <div class="pregunta-step {% if forloop.first %}active-step{% endif %}" id="step-{{ forloop.counter }}">
+                <div class="pregunta-card">
+                    <div class="enunciado">
+                        <span style="color: #8b0000;">{{ forloop.counter }}.</span>
+                        {{ pregunta.texto_pregunta|safe }}
+                        <div style="font-size: 0.8em; color: gray; margin-top: 5px;">({{ pregunta.asignatura.nombre }})</div>
+                    </div>
+
+                    {% if pregunta.imagen %}
+                        <div style="text-align: center; margin-bottom: 15px;">
+                            <img src="{{ pregunta.imagen.url }}" style="max-width: 100%; border-radius: 8px;">
+                        </div>
+                    {% endif %}
+
+                    <div class="opciones">
+                        {% for alternativa in pregunta.alternativas.all %}
+                            <label class="alternativa-item">
+                                <input type="radio" name="pregunta_{{ pregunta.id }}" value="{{ alternativa.id }}" onchange="marcarRespondida({{ forloop.parentloop.counter }}); autoSave({{ pregunta.id }}, {{ alternativa.id }})">
+                                <div class="alternativa-content">
+                                    {% if alternativa.texto %}<span>{{ alternativa.texto }}</span>{% endif %}
+                                    {% if alternativa.imagen %}
+                                        <img src="{{ alternativa.imagen.url }}" class="alternativa-img">
+                                    {% endif %}
+                                </div>
+                            </label>
+                        {% endfor %}
+                    </div>
+                </div>
+
+                <div class="nav-buttons">
+                    {% if not forloop.first %}
+                        <button type="button" class="btn-nav btn-prev" onclick="changeStep(-1)">Anterior</button>
+                    {% else %}
+                        <div></div>
+                    {% endif %}
+
+                    {% if not forloop.last %}
+                        <button type="button" class="btn-nav btn-next" onclick="changeStep(1)">Siguiente</button>
+                    {% else %}
+                        <button type="submit" class="btn-enviar" style="width: auto; margin-top: 0;">Finalizar Examen</button>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    var INTENTO_ID = {{ intento.id }};
+    var SEGUNDOS_RESTANTES = {{ segundos_restantes }};
+    var AREA_ID = {{ area.id }};
+    var RESPUESTAS_GUARDADAS = {{ respuestas_json|safe }};
+    var CSRF_TOKEN = '{{ csrf_token }}';
+    var AUTO_SAVE_URL = '{% url "guardar_respuesta_ajax" intento.id %}';
+    var SINCRONIZAR_TIEMPO_URL = '{% url "sincronizar_tiempo_ajax" intento.id %}';
+    var FINALIZAR_EXAMEN_URL = '{% url "finalizar_examen_ajax" intento.id %}';
+</script>
+<script src="{% static 'js/examen.js' %}"></script>
+{% endblock %}

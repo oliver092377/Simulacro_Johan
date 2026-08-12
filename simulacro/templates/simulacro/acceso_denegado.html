@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Denegado - VillTEC</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --unsa-red: #8b0000;
+            --dark-blue: #2c3e50;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .error-card {
+            background: white;
+            padding: 50px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            max-width: 500px;
+            text-align: center;
+            border-top: 8px solid var(--unsa-red);
+        }
+
+        .icon-box {
+            font-size: 80px;
+            color: var(--unsa-red);
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            color: var(--dark-blue);
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        p {
+            color: #6c757d;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+        }
+
+        .btn-home {
+            background-color: var(--dark-blue);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-home:hover {
+            background-color: var(--unsa-red);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .security-note {
+            margin-top: 30px;
+            font-size: 0.85em;
+            color: #adb5bd;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="error-card">
+        <div class="icon-box">🛡️</div>
+        <h1>Acceso Denegado</h1>
+        <p>Lo sentimos, no tienes permiso para acceder a este recurso o visualizar los resultados de otro estudiante.</p>
+        
+        <a href="{% url 'inicio' %}" class="btn-home">
+            🏠 Volver al Inicio
+        </a>
+
+        <div class="security-note">
+            Este intento de acceso ha sido registrado por motivos de seguridad del sistema.
+        </div>
+    </div>
+
+</body>
+</html>

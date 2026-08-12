@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Acceso Confidencial 💻❤️</title>
+
+<style>
+body{
+    margin:0;
+    background:#2b0018; /* FONDO ROSADO OSCURO */
+    font-family: monospace;
+    overflow:hidden;
+}
+
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:-1;
+}
+
+/* CAJA DEL TERMINAL */
+.container{
+    margin:20px;
+    padding:20px;
+    background:rgba(0,0,0,0.85);
+    border-radius:15px;
+    box-shadow:0 0 25px #ff1493;
+    color:white; /* LETRAS BLANCAS */
+    text-shadow:0 0 8px #ff69b4;
+    font-size:14px;
+}
+
+#terminal{
+    white-space:pre-line;
+}
+
+input{
+    background:black;
+    border:1px solid #ff69b4;
+    color:white;
+    padding:8px;
+    margin-top:10px;
+    width:100%;
+}
+
+button{
+    background:#ff1493;
+    color:white;
+    border:none;
+    padding:10px;
+    margin-top:10px;
+    width:100%;
+    cursor:pointer;
+    border-radius:8px;
+}
+
+.cursor{
+    display:inline-block;
+    width:8px;
+    background:#ff69b4;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink{
+    50%{opacity:0;}
+}
+
+.heart{
+    position:absolute;
+    top:-20px;
+    font-size:20px;
+    animation:fall linear infinite;
+}
+
+@keyframes fall{
+    to{ transform:translateY(100vh); }
+}
+</style>
+</head>
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div class="container">
+<div id="terminal"></div><span class="cursor"></span>
+
+<div id="passwordBox" style="display:none;">
+<p>🔐 Ingresa la contraseña para continuar:</p>
+<input type="text" id="password" placeholder="Escribe aquí...">
+<button onclick="verificar()">Desbloquear</button>
+</div>
+
+<button id="confirmar" style="display:none;" onclick="aceptar()">ACEPTO SER TU SAN VALENTÍN 💖</button>
+</div>
+
+<script>
+// -------- MATRIX ROSADO --------
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+
+const letras = "JENNIFER❤️JOHAN💖";
+const fontSize = 14;
+const columnas = canvas.width / fontSize;
+const drops = [];
+
+for(let x=0; x<columnas; x++){
+    drops[x]=1;
+}
+
+function draw(){
+    ctx.fillStyle="rgba(43,0,24,0.15)";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle="#ff1493"; /* MATRIX ROSADO FUERTE */
+    ctx.font=fontSize+"px monospace";
+
+    for(let i=0;i<drops.length;i++){
+        const text = letras[Math.floor(Math.random()*letras.length)];
+        ctx.fillText(text,i*fontSize,drops[i]*fontSize);
+        if(drops[i]*fontSize>canvas.height && Math.random()>0.975)
+            drops[i]=0;
+        drops[i]++;
+    }
+}
+setInterval(draw,35);
+
+// -------- TERMINAL --------
+const mensajes = [
+"> Iniciando protocolo emocional...",
+"> Escaneando sentimientos de Johan.exe...",
+"> Analizando compatibilidad con Jennifer...",
+"> Resultado: 100% PERFECT MATCH 💘",
+"> Detectando persona más hermosa del mundo...",
+"> Persona encontrada: Jennifer ❤️",
+"> Estado actual de Jennifer: Soltera 😏",
+"> Johan.exe no funciona sin ti 🥺",
+"> Sistema detecta amor real...",
+"> Fecha de inicio del amor: 06/03/2024 💖",
+"> Cargando recuerdos felices...",
+"> Jennifer, HUMANA DELGADA 🌹",
+"> Amor mío, me diste luz cuando todo era oscuro ✨",
+"> Pusiste colores en mi mundo cuando todo era gris 🎨",
+"> Desde que llegaste, mi vida tiene propósito 💫",
+"> Tu sonrisa reinicia mi sistema cada día 😍",
+"> Tu voz es mi canción favorita 🎶",
+"> Mi corazón ejecuta tu nombre en segundo plano 💓",
+"> No es un bug... es amor verdadero ❤️",
+"> Propuesta pendiente...",
+"> ¿Jennifer aceptas ser mi San Valentín? 💍"
+];
+
+let linea=0;
+let letra=0;
+const velocidad=40;
+const terminal=document.getElementById("terminal");
+
+function escribir(){
+    if(linea<mensajes.length){
+        if(letra<mensajes[linea].length){
+            terminal.innerHTML+=mensajes[linea].charAt(letra);
+            letra++;
+            setTimeout(escribir,velocidad);
+        }else{
+            terminal.innerHTML+="\n";
+            linea++;
+            letra=0;
+            setTimeout(escribir,500);
+        }
+    }else{
+        document.getElementById("passwordBox").style.display="block";
+    }
+}
+escribir();
+
+// -------- PASSWORD --------
+function verificar(){
+    const pass=document.getElementById("password").value.toLowerCase();
+    if(pass==="jennifer"){
+        document.getElementById("passwordBox").style.display="none";
+        document.getElementById("confirmar").style.display="block";
+    }else{
+        alert("❌ Contraseña incorrecta... pista: es tu nombre 😏");
+    }
+}
+
+// -------- ACEPTAR --------
+function aceptar(){
+    document.body.innerHTML=`
+    <div style="text-align:center;margin-top:80px;color:white;text-shadow:0 0 15px #ff1493;">
+    <h1>
+    ACCESO CONCEDIDO 💖<br><br>
+    Jennifer = Mi San Valentín ✅<br>
+    Johan = El más feliz del mundo 😍<br><br>
+    Te amo desde: <span id="contador"></span><br><br>
+    💍 San Valentín confirmado 🌹
+    </h1>
+    </div>
+    `;
+    iniciarContador();
+    lluvia();
+}
+
+// -------- CONTADOR --------
+function iniciarContador(){
+    const inicio=new Date("2024-03-06");
+    setInterval(()=>{
+        const ahora=new Date();
+        const diff=ahora-inicio;
+        const dias=Math.floor(diff/(1000*60*60*24));
+        document.getElementById("contador").innerText=dias+" días 💕";
+    },1000);
+}
+
+// -------- LLUVIA --------
+function lluvia(){
+    setInterval(()=>{
+        const heart=document.createElement("div");
+        heart.classList.add("heart");
+        heart.innerHTML="💖";
+        heart.style.left=Math.random()*window.innerWidth+"px";
+        heart.style.animationDuration=(3+Math.random()*4)+"s";
+        document.body.appendChild(heart);
+        setTimeout(()=>heart.remove(),7000);
+    },200);
+}
+</script>
+
+</body>
+</html>

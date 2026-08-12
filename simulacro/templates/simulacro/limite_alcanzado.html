@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Límite Alcanzado</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 50px; background-color: #eee; }
+        .card { background: white; padding: 40px; max-width: 500px; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        h1 { color: #c0392b; } /* Rojo alerta */
+        
+        .btn { display: block; width: 100%; padding: 15px; margin: 10px 0; text-decoration: none; border-radius: 5px; font-weight: bold; }
+        
+        .btn-ver { background-color: #27ae60; color: white; } /* Verde para ver nota */
+        .btn-inicio { background-color: #7f8c8d; color: white; } /* Gris para volver */
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>¡Alto ahí, postulante! 🛑</h1>
+        <p>Solo se permite <strong>un simulacro por día</strong> en esta área.</p>
+        
+        <div style="margin-top: 30px;">
+            <p>Ya realizaste tu intento de hoy. ¿Quieres repasar cómo te fue?</p>
+            
+            <a href="{% url 'ver_resultado' intento_id %}" class="btn btn-ver">
+                📊 Ver mi Resultado de Hoy
+            </a>
+
+            <a href="{% url 'inicio' %}" class="btn btn-inicio">
+                Volver al Inicio
+            </a>
+        </div>
+    </div>
+</body>
+</html>
