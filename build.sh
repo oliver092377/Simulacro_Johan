@@ -6,5 +6,5 @@ python manage.py collectstatic --no-input
 python manage.py migrate --no-input
 
 python manage.py create_admin
-python cargar_datos_prueba.py
-python fix_alternativas.py
+#python cargar_datos_prueba.py
+#python fix_alternativas.py
