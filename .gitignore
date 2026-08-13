@@ -28,7 +28,7 @@ media/soluciones/
 media/alternativas/
 
 # Static collected files
-static/
+#static/
 
 # IDE
 .vscode/
