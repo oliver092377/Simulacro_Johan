@@ -10,6 +10,7 @@ from .resultados import (
     generar_qr_resultado, descargar_solucionario_pdf,
 )
 from .pagos import procesar_pago, generar_reporte_pdf, generar_qr_whatsapp
+from .admin_tools import descargar_examen_pdf
 
 __all__ = [
     'inicio',
@@ -29,4 +30,5 @@ __all__ = [
     'procesar_pago',
     'generar_reporte_pdf',
     'generar_qr_whatsapp',
+    'descargar_examen_pdf',
 ]

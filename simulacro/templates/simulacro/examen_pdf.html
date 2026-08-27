@@ -1,0 +1,138 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <base href="{{ base_url }}">
+    <title>Examen {{ area.get_nombre_display }}</title>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)'], ['$', '$']],
+                displayMath: [['\\[', '\\]'], ['$$', '$$']]
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            },
+            svg: {
+                fontCache: 'global'
+            }
+        };
+    </script>
+    <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+    <style>
+        @page {
+            size: Letter;
+            margin: 14mm 12mm;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            color: #172033;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 9pt;
+            margin: 0;
+        }
+
+        .header {
+            border-bottom: 2px solid #8b0000;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #8b0000;
+            font-size: 16pt;
+            margin: 0 0 4px;
+        }
+
+        .header p {
+            color: #475569;
+            font-size: 8pt;
+            margin: 0;
+        }
+
+        .exam-content {
+            column-count: 2;
+            column-gap: 9mm;
+        }
+
+        .question {
+            break-inside: avoid;
+            margin: 0 0 10px;
+            page-break-inside: avoid;
+        }
+
+        .question-title {
+            font-weight: 700;
+            line-height: 1.32;
+            margin-bottom: 4px;
+        }
+
+        .subject {
+            color: #64748b;
+            font-size: 7.5pt;
+            font-weight: 400;
+        }
+
+        .question-image {
+            display: block;
+            margin: 5px auto 7px;
+            max-height: 220px;
+            max-width: 100%;
+            object-fit: contain;
+        }
+
+        .alternative {
+            break-inside: avoid;
+            line-height: 1.28;
+            margin: 2px 0 0 8px;
+        }
+
+        mjx-container {
+            margin: 0 1px !important;
+        }
+
+        @media print {
+            .exam-content {
+                column-fill: balance;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>EXAMEN DE ADMISION - {{ area.get_nombre_display }}</h1>
+        <p>VILLTECC | Preguntas seleccionadas: {{ preguntas|length }}</p>
+    </header>
+
+    <main class="exam-content">
+        {% for pregunta in preguntas %}
+            <article class="question">
+                <div class="question-title">
+                    {{ forloop.counter }}. {{ pregunta.texto_pregunta|safe }}
+                    <div class="subject">({{ pregunta.asignatura.nombre }})</div>
+                </div>
+
+                {% if pregunta.imagen %}
+                    <img class="question-image" src="{{ pregunta.imagen.url }}" alt="Imagen de la pregunta {{ forloop.counter }}">
+                {% endif %}
+
+                {% for alternativa in pregunta.alternativas.all %}
+                    <div class="alternative">
+                        <strong>{% if forloop.counter == 1 %}A{% elif forloop.counter == 2 %}B{% elif forloop.counter == 3 %}C{% else %}D{% endif %})</strong>
+                        {{ alternativa.texto|default:'[Imagen]' }}
+                        {% if alternativa.imagen %}
+                            <img class="question-image" src="{{ alternativa.imagen.url }}" alt="Imagen de alternativa">
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </article>
+        {% endfor %}
+    </main>
+</body>
+</html>

@@ -5,8 +5,15 @@ from django.utils.html import strip_tags, format_html
 from django.urls import reverse
 from .models import Area, Asignatura, MatrizPeso, Pregunta, Alternativa, Intento, RespuestaDetalle, PerfilEstudiante
 
-# 1. Configuración para Áreas (Simple)
-admin.site.register(Area)
+# 1. Configuración para Áreas
+@admin.register(Area)
+class AreaAdmin(admin.ModelAdmin):
+    list_display = ('nombre', 'descargar_examen')
+
+    def descargar_examen(self, obj):
+        url = reverse('admin_descargar_examen_pdf', args=[obj.id])
+        return format_html('<a class="button" href="{}">📄 Descargar PDF</a>', url)
+    descargar_examen.short_description = 'Examen PDF'
 
 # 2. Configuración para Asignaturas
 @admin.register(Asignatura)

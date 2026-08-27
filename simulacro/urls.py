@@ -42,4 +42,7 @@ urlpatterns = [
 
     path('mis-examenes/', views.mis_examenes, name='mis_examenes'),
     path('descargar-solucionario/<int:intento_id>/', views.descargar_solucionario_pdf, name='descargar_solucionario_pdf'),
+
+    # Descarga administrativa de exámenes
+    path('herramientas-admin/descargar-examen/<int:area_id>/', views.descargar_examen_pdf, name='admin_descargar_examen_pdf'),
 ]

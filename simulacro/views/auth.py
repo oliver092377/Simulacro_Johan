@@ -44,9 +44,15 @@ def registro(request):
             usuario.is_active = False  # Inactivo hasta verificar email
             usuario.save()
 
-            # Crear perfil si no existe
+            # Guardar los datos extendidos enviados durante el registro.
             from ..models import PerfilEstudiante
-            PerfilEstudiante.objects.get_or_create(user=usuario)
+            PerfilEstudiante.objects.update_or_create(
+                user=usuario,
+                defaults={
+                    'telefono': form.cleaned_data['telefono'],
+                    'carrera': form.cleaned_data['carrera'],
+                },
+            )
 
             # Enviar email de verificacion
             _enviar_email_verificacion(request, usuario)
